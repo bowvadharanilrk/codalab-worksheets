@@ -25,6 +25,13 @@ gulp.task('less', function () {
     .pipe(gulp.dest('static/css'));
 });
 
+// Watches files and runs compile tasks if they are changed
+gulp.task('watch', function(){
+  gulp.watch('static/js/**/*.jsx', ['jsx']);
+  gulp.watch('static/less/*.less', ['less']);
+})
+
+
 // Cleanup compiled jsx
 gulp.task('clean', function() {
     del(['static/dist']);

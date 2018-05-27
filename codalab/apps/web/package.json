@@ -6,6 +6,7 @@
   "scripts": {
     "bower": "bower install",
     "build": "gulp jsx && gulp less",
+    "watch": "gulp watch",
     "clean": "gulp clean",
     "jsx": "gulp jsx",
     "less": "gulp less",

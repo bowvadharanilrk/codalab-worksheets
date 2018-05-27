@@ -39,7 +39,7 @@ var MarkdownItem = React.createClass({
     },
 
     render: function() {
-        var contents = this.props.item.interpreted;
+        var contents = this.props.item.text;
         // Order is important!
         contents = this.processMarkdown(contents);
 

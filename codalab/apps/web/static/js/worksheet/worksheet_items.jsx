@@ -162,7 +162,7 @@ var addWorksheetItems = function(props, worksheet_items) {
     props.url = url;
 
     var constructor = {
-      'markup': MarkdownItem,
+      'markup_block': MarkdownItem,
       'table': TableItem,
       'contents': ContentsItem,
       'worksheet': WorksheetItem,

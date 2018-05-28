@@ -15,17 +15,15 @@ var ImageItem = React.createClass({
 
     render: function() {
         var className = 'type-image' + (this.props.focused ? ' focused' : '');
-        var src = "data:image/png;base64," + this.props.item.interpreted;
+        var src = "data:image/png;base64," + this.props.item.image_data;
         var styles = {};
-        var properties = this.props.item.properties;
-        if (properties) {
-            if (properties.hasOwnProperty('height')) {
-                styles['height'] = properties.height + "px;"
-            }
-            if (properties.hasOwnProperty('width')) {
-                styles['width'] = properties.width + "px;"
-            }
+        if (this.props.item.hasOwnProperty('height')) {
+            styles['height'] = this.props.item.height + "px;"
         }
+        if (this.props.item.hasOwnProperty('width')) {
+            styles['width'] = this.props.item.width + "px;"
+        }
+
         return(
             <div className="ws-item" onClick={this.handleClick}>
                 <div className={className} ref={this.props.item.ref}>

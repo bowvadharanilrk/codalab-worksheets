@@ -16,12 +16,12 @@ var ContentsItem = React.createClass({
 
     render: function() {
         var className = 'type-contents' + (this.props.focused ? ' focused' : '');
-        if (!this.props.item.interpreted) {
+        if (!this.props.item.lines) {
             return (
               <div></div>
             );
         }
-        var contents = this.props.item.interpreted.join('');
+        var contents = this.props.item.lines.join('');
         var bundleInfo = this.props.item.bundle_info;
         return(
             <div className="ws-item" onClick={this.handleClick} onContextMenu={this.props.handleContextMenu.bind(null, bundleInfo.uuid, this.props.focusIndex, 0, bundleInfo.bundle_type === 'run')}>

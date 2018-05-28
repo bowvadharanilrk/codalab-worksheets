@@ -541,6 +541,7 @@ var Worksheet = React.createClass({
               }.bind(this)
           });
         } else {
+          console.log(partialUpdateItems);
           var ws = _.clone(this.state.ws);
           for (var i = 0; i < partialUpdateItems.length; i++) {
             if (!partialUpdateItems[i]) continue;
@@ -556,6 +557,7 @@ var Worksheet = React.createClass({
                   ws.info.items[i].bundle_info[j] = bundle_info[j];
                 }
               }
+              // TODO: Figure out what this is doing.
               if (ws.info.items[i].bundle_info.length < ws.info.items[i].interpreted[1].length) {
                 ws.info.items[i].interpreted[1] = ws.info.items[i].interpreted[1].slice(0, ws.info.items[i].bundle_info.length);
               }

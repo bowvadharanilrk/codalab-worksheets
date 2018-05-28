@@ -163,12 +163,12 @@ var addWorksheetItems = function(props, worksheet_items) {
     var constructor = {
       'markup_block': MarkdownItem,
       'table': TableItem,
-      'contents': ContentsItem,
+      'contents_block': ContentsItem,
       'worksheet': WorksheetItem,
       'wsearch': WorksheetItem,
-      'html': HTMLItem,
+      'html_block': HTMLItem,
       'record': RecordItem,
-      'image': ImageItem,
+      'image_block': ImageItem,
       'graph': GraphItem,
     }[item.mode];
 

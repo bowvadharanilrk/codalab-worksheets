@@ -36,7 +36,7 @@ var Worksheet = React.createClass({
     // Return the number of rows occupied by this item.
     _numTableRows: function(item) {
       if (item) {
-        if (item.mode == 'table')
+        if (item.mode == 'table_block')
           return item.bundle_info.length;
         if (item.mode == 'wsearch')
           return item.interpreted.items.length;
@@ -44,9 +44,9 @@ var Worksheet = React.createClass({
           var subitem = item.interpreted.items[0];
           if (!subitem) {
             return null;
-          } else if (subitem.mode === 'table') {
+          } else if (subitem.mode === 'table_block') {
             return subitem != null ? subitem.bundle_info.length : null;
-          } else if (subitem.mode === 'markup') {
+          } else if (subitem.mode === 'markup_block') {
             return 1;
           } else {
             console.error('Error in _numTableRows');
@@ -251,7 +251,7 @@ var Worksheet = React.createClass({
             var wsItems = this.state.ws.info.items;
 
             if (focusIndex >= 0 && (
-                    wsItems[focusIndex].mode === 'table' ||
+                    wsItems[focusIndex].mode === 'table_block' ||
                     wsItems[focusIndex].mode === 'search' ||
                     wsItems[focusIndex].mode === 'wsearch')) {
                 // worksheet_item_interface and table_item_interface do the exact same thing anyway right now
@@ -270,7 +270,7 @@ var Worksheet = React.createClass({
             var subFocusIndex = this.state.subFocusIndex;
             var wsItems = this.state.ws.info.items;
             if (focusIndex >= 0 && (
-                  wsItems[focusIndex].mode === 'table' ||
+                  wsItems[focusIndex].mode === 'table_block' ||
                   wsItems[focusIndex].mode === 'search' ||
                   wsItems[focusIndex].mode === 'wsearch' )) {
                 if (subFocusIndex + 1 >= this._numTableRows(wsItems[focusIndex])) {
@@ -427,7 +427,7 @@ var Worksheet = React.createClass({
               } else {
                 var item = this.state.ws.info.items[this.state.focusIndex];
                 // For non-tables such as search and wsearch, we have subFocusIndex, but not backed by raw items, so use 0.
-                var focusIndexPair = this.state.focusIndex + ',' + (item.mode == 'table' ? this.state.subFocusIndex : 0);
+                var focusIndexPair = this.state.focusIndex + ',' + (item.mode == 'table_block' ? this.state.subFocusIndex : 0);
                 rawIndex = this.state.ws.info.interpreted_to_raw[focusIndexPair];
               }
 
@@ -558,8 +558,9 @@ var Worksheet = React.createClass({
                 }
               }
               // TODO: Figure out what this is doing.
-              if (ws.info.items[i].bundle_info.length < ws.info.items[i].interpreted[1].length) {
-                ws.info.items[i].interpreted[1] = ws.info.items[i].interpreted[1].slice(0, ws.info.items[i].bundle_info.length);
+              // bundle_info count is less than the number of rows, only use the first rows
+              if (ws.info.items[i].mode === 'table_block' && ws.info.items[i].bundle_info.length < ws.info.items[i].rows.length) {
+                ws.info.items[i].rows = ws.info.items[i].rows.slice(0, ws.info.items[i].bundle_info.length);
               }
             }
           }

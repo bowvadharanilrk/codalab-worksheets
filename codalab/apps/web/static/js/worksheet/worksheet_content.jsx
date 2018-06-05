@@ -27,7 +27,6 @@ var WorksheetContent = function() {
             cache: false,
             success: function(info) {
                 this.info = info;
-                console.log('FFFFF fetch info', info);
                 props.success(this.info);
             }.bind(this),
             error: function(xhr, status, err) {

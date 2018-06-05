@@ -48,14 +48,14 @@ var TableItem = React.createClass({
         var item = this.props.item;
         var canEdit = this.props.canEdit;
         var bundleInfos = item.bundles_spec.bundle_infos;
-        var headerItems = item.interpreted[0];
+        var headerItems = item.header;
         var columnClasses = headerItems.map(function(item, index) {
             return 'table-column-' + encodeURIComponent(item).replace("%", "_").replace(/[^-_A-Za-z0-9]/g, "_");
         });
         var headerHtml = headerItems.map(function(item, index) {
             return <th key={index} className={columnClasses[index]}>{item}</th>;
         });
-        var rowItems = item.interpreted[1];  // Array of {header: value, ...} objects
+        var rowItems = item.rows;  // Array of {header: value, ...} objects
         var columnWithHyperlinks = [];
         Object.keys(rowItems[0]).forEach(function(x) {
             if (rowItems[0][x] && rowItems[0][x]['path'])

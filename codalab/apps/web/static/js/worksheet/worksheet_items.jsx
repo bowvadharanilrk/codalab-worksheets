@@ -139,7 +139,7 @@ var addWorksheetItems = function(props, worksheet_items) {
     if (item.mode === 'search') {
       var subitem = item.interpreted.items[0];
       if (!subitem) {
-        subitem = {'interpreted': '(no results)', 'mode': 'markup'};
+        subitem = {'interpreted': '(no results)', 'mode': 'markup_block'};
         //console.error('Invalid item', item);
       }
       var subprops = {};
@@ -162,14 +162,14 @@ var addWorksheetItems = function(props, worksheet_items) {
 
     var constructor = {
       'markup_block': MarkdownItem,
-      'table': TableItem,
+      'table_block': TableItem,
       'contents_block': ContentsItem,
-      'worksheet': WorksheetItem,
-      'wsearch': WorksheetItem,
+      'worksheet_block': WorksheetItem,
+      'wsearch_block': WorksheetItem,
       'html_block': HTMLItem,
-      'record': RecordItem,
+      'record_block': RecordItem,
       'image_block': ImageItem,
-      'graph': GraphItem,
+      'graph_block': GraphItem,
     }[item.mode];
 
     var elem;

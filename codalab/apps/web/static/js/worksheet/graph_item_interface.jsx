@@ -11,12 +11,12 @@ var GraphItem = React.createClass({
     },
 
     _xi: function() {
-      var props = this.props.item.properties;
-      return props.x ? parseInt(props.x) : 0;
+      var xlabel = this.props.item.xlabel;
+      return xlabel ? parseInt(xlabel) : 0;
     },
     _yi: function() {
-      var props = this.props.item.properties;
-      return props.y ? parseInt(props.y) : 1;
+      var ylabel = this.props.item.ylabel;
+      return ylabel ? parseInt(ylabel) : 1;
     },
 
     // Return data for C3
@@ -34,8 +34,8 @@ var GraphItem = React.createClass({
       var ytox = {};  // Maps the names of the y columns to x columns
       var columns = [];
       var totalNumPoints = 0;
-      for (var i = 0; i < item.interpreted.length; i++) {  // For each trajectory
-        var info = item.interpreted[i];
+      for (var i = 0; i < item.trajectories.length; i++) {  // For each trajectory
+        var info = item.trajectories[i];
         var points = info.points;
         if (!points) continue;  // No points...
         var display_name = i + ': ' + info.display_name;
@@ -70,8 +70,8 @@ var GraphItem = React.createClass({
 
       // Axis labels
       var item = this.props.item;
-      var xlabel = item.properties.xlabel || this._xi();
-      var ylabel = item.properties.ylabel || this._yi();
+      var xlabel = item.xlabel || this._xi();
+      var ylabel = item.ylabel || this._yi();
 
       var chart = c3.generate({
         bindto: '#' + this._chartId(),

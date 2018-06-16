@@ -63,7 +63,7 @@ let WorksheetSidePanel = React.createClass({
       return !this.isFocusWorksheet(focus) && !this.isFocusMarkup(focus);
     },
     getBundleInfo: function(focus) {
-      if (focus.mode == 'table')  // Drill down into row of table
+      if (focus.mode == 'table_block')  // Drill down into row of table
           return this.props.subFocusIndex != -1 ? focus.bundles_spec.bundle_infos[this.props.subFocusIndex] : null;
       else
           return focus.bundles_spec.bundle_infos[0];

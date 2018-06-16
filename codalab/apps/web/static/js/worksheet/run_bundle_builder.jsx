@@ -231,12 +231,8 @@ var BundleBrowser = React.createClass({
 
     var rows = [];
     worksheet.items.forEach(function(item) {
-      if (item.bundle_info) {
-        var bundle_infos = item.bundle_info;
-        if (!(bundle_infos instanceof Array)) {
-          bundle_infos = [bundle_infos];
-        }
-        bundle_infos.forEach(function(b) {
+      if (item.bundles_spec) {
+        item.bundles_spec.bundle_infos.forEach(function(b) {
           var url = "/bundles/" + b.uuid;
           var short_uuid = shorten_uuid(b.uuid);
           if (b.target_info && b.target_info.type === 'directory') {

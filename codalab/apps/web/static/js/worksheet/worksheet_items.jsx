@@ -46,13 +46,12 @@ var WorksheetItemList = React.createClass({
       if (info && info.items.length > 0) {
         var items = info.items;
         for (var index = 0; index < items.length; index++) {
-          var bundle_info = this.props.ensureIsArray(items[index].bundle_info);
-          if (bundle_info) {
-            for (var subIndex = 0; subIndex < bundle_info.length; subIndex++) {
-              var bundle = bundle_info[subIndex];
-              if (!(bundle.uuid in uuidToIndex))
-                uuidToIndex[bundle.uuid] = [];
-              uuidToIndex[bundle.uuid].push([index, subIndex]);
+          if (items[index].bundles_spec) {
+            for (var subIndex = 0; subIndex < items[index].bundles_spec.bundle_infos.length; subIndex++) {
+              var bundle_info = items[index].bundles_spec.bundle_infos[subIndex];
+              if (!(bundle_info.uuid in uuidToIndex))
+                uuidToIndex[bundle_info.uuid] = [];
+              uuidToIndex[bundle_info.uuid].push([index, subIndex]);
             }
           }
         }
@@ -153,8 +152,8 @@ var addWorksheetItems = function(props, worksheet_items) {
 
     // Determine URL corresponding to item.
     var url = null;
-    if (item.bundle_info && item.bundle_info.uuid)
-      url = '/bundles/' + item.bundle_info.uuid;
+    if (item.bundles_spec && item.bundles_spec.bundle_infos[0] && item.bundles_spec.bundle_infos[0].uuid)
+      url = '/bundles/' + item.bundles_spec.bundle_infos[0].uuid;
     if (item.subworksheet_info)
       url = '/worksheets/' + item.subworksheet_info.uuid;
 

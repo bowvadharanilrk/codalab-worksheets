@@ -22,7 +22,7 @@ var ContentsItem = React.createClass({
             );
         }
         var contents = this.props.item.interpreted.join('');
-        var bundleInfo = this.props.item.bundle_info;
+        var bundleInfo = this.props.item.bundles_spec.bundle_infos[0];
         return(
             <div className="ws-item" onClick={this.handleClick} onContextMenu={this.props.handleContextMenu.bind(null, bundleInfo.uuid, this.props.focusIndex, 0, bundleInfo.bundle_type === 'run')}>
                 <div className={className} ref={this.props.item.ref}>

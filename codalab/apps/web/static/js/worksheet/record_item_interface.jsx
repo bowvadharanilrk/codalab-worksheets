@@ -17,7 +17,7 @@ var RecordItem = React.createClass({
     render: function() {
         var item = this.props.item;
         var className = 'table table-record' + (this.props.focused ? ' focused' : '');
-        var bundleInfo = this.props.item.bundle_info;
+        var bundleInfo = this.props.item.bundles_spec.bundle_infos[0];
         var header = item.interpreted[0];
         var k = header[0];
         var v = header[1];

@@ -15,7 +15,7 @@ var GoToBundleMixin = {
          }.bind(this), 'keydown');
     },
     goToBundlePage: function(){
-        var bundleUUID = this.props.item.bundle_info.uuid;
+        var bundleUUID = this.props.item.bundles_spec.bundle_infos[0].uuid;
         window.open('/bundles/' + bundleUUID, '_blank');
     },
 };

@@ -57,18 +57,16 @@ let WorksheetSidePanel = React.createClass({
     },
     isFocusMarkup: function(focus) {
       // If search and didn't return bundles, then count as markup
-      return focus.mode == 'markup' || (focus.mode == 'search' && (!focus.interpreted.items[0] || focus.interpreted.items[0].bundle_info === undefined));
+      return focus.mode == 'markup' || (focus.mode == 'search' && (!focus.interpreted.items[0] || focus.interpreted.items[0].bundles_spec.bundle_infos[0] === undefined));
     },
     isFocusBundle: function(focus) {
       return !this.isFocusWorksheet(focus) && !this.isFocusMarkup(focus);
     },
     getBundleInfo: function(focus) {
       if (focus.mode == 'table')  // Drill down into row of table
-          return this.props.subFocusIndex != -1 ? focus.bundle_info[this.props.subFocusIndex] : null;
-      else if (focus.mode == 'search')
-          return this.props.subFocusIndex != -1 ? focus.interpreted.items[0].bundle_info[this.props.subFocusIndex] : null;
+          return this.props.subFocusIndex != -1 ? focus.bundles_spec.bundle_infos[this.props.subFocusIndex] : null;
       else
-          return focus.bundle_info;
+          return focus.bundles_spec.bundle_infos[0];
     },
     getWorksheetInfo: function(focus) {
       if (focus.mode == 'worksheet')
@@ -231,11 +229,9 @@ var WorksheetDetailSidePanel = React.createClass({
       var rows = [];
       if (worksheet.items) {
         worksheet.items.forEach(function(item) {
-          if (item.bundle_info) {
+          if (item.bundles_spec.bundle_infos[0]) {
             // Show bundle
-            var bundle_infos = item.bundle_info;
-            if (!(bundle_infos instanceof Array))
-              bundle_infos = [bundle_infos];
+            var bundle_infos = item.bundles_spec.bundle_infos;
 
             bundle_infos.forEach(function(b) {
               var url = "/bundles/" + b.uuid;

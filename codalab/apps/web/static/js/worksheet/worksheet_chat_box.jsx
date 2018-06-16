@@ -17,7 +17,7 @@ var WorksheetChatBox = React.createClass({
   componentWillReceiveProps: function(nextProps) {
     var bundleId = window.DEFAULT_ID;
     if (this.isFocusBundle(nextProps.focusIndex, nextProps.subFocusIndex)) {
-      bundleId = nextProps.ws.info.items[nextProps.focusIndex].bundle_info[nextProps.subFocusIndex].uuid;
+      bundleId = nextProps.ws.info.items[nextProps.focusIndex].bundles_spec.bundle_infos[nextProps.subFocusIndex].uuid;
     }
     this.setState({
       worksheetId: nextProps.ws.uuid,

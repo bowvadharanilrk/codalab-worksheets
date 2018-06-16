@@ -37,21 +37,9 @@ var Worksheet = React.createClass({
     _numTableRows: function(item) {
       if (item) {
         if (item.mode == 'table')
-          return item.bundle_info.length;
+          return item.bundles_spec.bundle_infos.length;
         if (item.mode == 'wsearch')
           return item.interpreted.items.length;
-        if (item.mode == 'search') {
-          var subitem = item.interpreted.items[0];
-          if (!subitem) {
-            return null;
-          } else if (subitem.mode === 'table') {
-            return subitem != null ? subitem.bundle_info.length : null;
-          } else if (subitem.mode === 'markup') {
-            return 1;
-          } else {
-            console.error('Error in _numTableRows');
-          }
-        }
       } else {
         return null;
       }
@@ -65,7 +53,7 @@ var Worksheet = React.createClass({
         if (index === 'end') {
             index = -1;
             for (var i = info.items.length - 1; i >= 0; i--) {
-                if (info.items[i].bundle_info) {
+                if (info.items[i].bundles_spec) {
                     index = i;
                     break;
                 }
@@ -86,13 +74,12 @@ var Worksheet = React.createClass({
             // all the bundles that have focusIndex 1 and subFocusIndex >= 2, and also all the bundles that have focusIndex > 1
             var focusedBundleUuidList = [];
             for (var i = index; i < info.items.length; i++) {
-                var bundle_info = this.ensureIsArray(info.items[i].bundle_info);
-                if (bundle_info) {
-                    var j = i === index ? subIndex : 0;
-                    for (; j < (this._numTableRows(info.items[i]) || 1); j++) {
-                        focusedBundleUuidList.push(bundle_info[j].uuid);
-                    }
+              if (info.items[i].bundles_spec) {
+                var j = i === index ? subIndex : 0;
+                for (; j < (this._numTableRows(info.items[i]) || 1); j++) {
+                  focusedBundleUuidList.push(info.items[i].bundles_spec.bundle_infos[j].uuid);
                 }
+              }
             }
         }
         // Change the focus - triggers updating of all descendants.
@@ -367,17 +354,15 @@ var Worksheet = React.createClass({
       if (info && info.items.length > 0) {
         var items = info.items;
         for (var i = 0; i < items.length; i++) {
-          var bundle_info = items[i].bundle_info;
-          if (bundle_info) {
-            if (!Array.isArray(bundle_info)) bundle_info = [bundle_info];
-            for (var j = 0; j < bundle_info.length; j++) {
-              var bundle = bundle_info[j];
-              if (bundle.bundle_type === 'run') {
-                if (bundle.state !== 'ready' && bundle.state !== 'failed') {
-                  updatingBundleUuids[bundle.uuid] = true;
+          if (items[i].bundles_spec) {
+            for (var j = 0; j < items[i].bundles_spec.bundle_infos.length; j++) {
+              var bundle_info = items[i].bundles_spec.bundle_infos[j];
+              if (bundle_info.bundle_type === 'run') {
+                if (bundle_info.state !== 'ready' && bundle_info.state !== 'failed') {
+                  updatingBundleUuids[bundle_info.uuid] = true;
                 } else {
-                  if (bundle.uuid in updatingBundleUuids)
-                    delete updatingBundleUuids[bundle.uuid];
+                  if (bundle_info.uuid in updatingBundleUuids)
+                    delete updatingBundleUuids[bundle_info.uuid];
                 }
               }
             }
@@ -466,9 +451,8 @@ var Worksheet = React.createClass({
       if (!items) return 0;
       var count = 0;
       for (var i = 0; i < items.length; i++) {
-        var bundle_info = this.ensureIsArray(items[i].bundle_info);
-        if (bundle_info) {
-          count += bundle_info.length;
+        if (items[i].bundles_spec) {
+          count += items[i].bundles_spec.bundle_infos.length;
         }
       }
       return count;
@@ -479,10 +463,9 @@ var Worksheet = React.createClass({
       if (!items) return null;
       for (var i = 0; i < this.state.focusedBundleUuidList.length; i++) {
         for (var index = 0; index < items.length; index++) {
-          var bundle_info = this.ensureIsArray(items[index].bundle_info);
-          if (bundle_info) {
+          if (items[index].bundles_spec) {
             for (var subIndex = 0; subIndex < (this._numTableRows(items[index]) || 1); subIndex++) {
-              if (bundle_info[subIndex].uuid == this.state.focusedBundleUuidList[i])
+              if (items[index].bundles_spec.bundle_infos[subIndex].uuid == this.state.focusedBundleUuidList[i])
                 return [index, subIndex];
             }
           }
@@ -545,21 +528,7 @@ var Worksheet = React.createClass({
           for (var i = 0; i < partialUpdateItems.length; i++) {
             if (!partialUpdateItems[i]) continue;
             // update interpreted items
-            ws.info.items[i].interpreted = partialUpdateItems[i].interpreted;
-            var bundle_info = partialUpdateItems[i].bundle_info;
-            if (bundle_info) {
-              bundle_info = this.ensureIsArray(bundle_info);
-              ws.info.items[i].bundle_info = this.ensureIsArray(ws.info.items[i].bundle_info);
-              for (var j = 0; j < bundle_info.length; j++) {
-                if (bundle_info[j]) {
-                  // update bundle info
-                  ws.info.items[i].bundle_info[j] = bundle_info[j];
-                }
-              }
-              if (ws.info.items[i].bundle_info.length < ws.info.items[i].interpreted[1].length) {
-                ws.info.items[i].interpreted[1] = ws.info.items[i].interpreted[1].slice(0, ws.info.items[i].bundle_info.length);
-              }
-            }
+            ws.info.items[i] = partialUpdateItems[i];
           }
           this.setState({ws: ws, version: this.state.version + 1});
           this.checkRunBundle(ws.info)

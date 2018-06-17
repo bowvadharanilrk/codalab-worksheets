@@ -135,21 +135,6 @@ var WorksheetItemList = React.createClass({
 var addWorksheetItems = function(props, worksheet_items) {
     var item = props.item;
 
-    // Unpack search item into a table.
-    if (item.mode === 'search') {
-      var subitem = item.interpreted.items[0];
-      if (!subitem) {
-        subitem = {'interpreted': '(no results)', 'mode': 'markup_block'};
-        //console.error('Invalid item', item);
-      }
-      var subprops = {};
-      for (var k in props) subprops[k] = props[k];
-      subprops.item = subitem;
-      subprops.focusIndex = props.focusIndex;
-      addWorksheetItems(subprops, worksheet_items);
-      return;
-    }
-
     // Determine URL corresponding to item.
     var url = null;
     if (item.bundles_spec && item.bundles_spec.bundle_infos[0] && item.bundles_spec.bundle_infos[0].uuid)
@@ -164,8 +149,7 @@ var addWorksheetItems = function(props, worksheet_items) {
       'markup_block': MarkdownItem,
       'table_block': TableItem,
       'contents_block': ContentsItem,
-      'worksheet_block': WorksheetItem,
-      'wsearch_block': WorksheetItem,
+      'subworksheets_block': WorksheetItem,
       'html_block': HTMLItem,
       'record_block': RecordItem,
       'image_block': ImageItem,

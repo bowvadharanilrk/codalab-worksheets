@@ -41,10 +41,8 @@ var WorksheetItem = React.createClass({
 
     _getItems: function() {
       var item = this.props.item;
-      if (item.mode == 'worksheet') {
-        return [item];
-      } else if (item.mode == 'wsearch') {
-        return item.interpreted.items;
+      if (item.mode == 'subworksheets_block') {
+        return item.subworksheet_infos;
       } else {
         throw 'Invalid: ' + item.mode;
       }
@@ -66,7 +64,7 @@ var WorksheetItem = React.createClass({
         var body_rows_html = items.map(function(row_item, row_index) {
             var row_ref = 'row' + row_index;
             var row_focused = self.props.focused && (row_index == self.props.subFocusIndex);
-            var url = '/worksheets/' + row_item.interpreted.uuid;
+            var url = '/worksheets/' + row_item.uuid;
             return <TableWorksheetRow
                      key={row_index}
                      ref={row_ref}
@@ -74,7 +72,7 @@ var WorksheetItem = React.createClass({
                      rowIndex={row_index}
                      focused={row_focused}
                      url={url}
-                     uuid={row_item.interpreted.uuid}
+                     uuid={row_item.uuid}
                      canEdit={canEdit}
                      updateRowIndex={self.updateRowIndex}
                    />;
@@ -111,7 +109,7 @@ var TableWorksheetRow = React.createClass({
       //var newWindow = event.ctrlKey;
       if (newWindow) {
         // Open in new window
-        var item = this.props.item.interpreted;
+        var item = this.props.item;
         var ws_url = '/worksheets/' + item.uuid;
         window.open(ws_url, '_blank');
       } else {
@@ -121,7 +119,7 @@ var TableWorksheetRow = React.createClass({
     },
 
     render: function() {
-        var item = this.props.item.interpreted;
+        var item = this.props.item;
         var worksheet_display = item.name;
         if (item.title) {
             worksheet_display = item.title + " [" + item.name + "]";

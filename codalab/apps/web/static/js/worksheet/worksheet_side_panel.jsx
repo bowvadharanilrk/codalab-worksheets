@@ -53,11 +53,11 @@ let WorksheetSidePanel = React.createClass({
 
     // What kind of thing is it?
     isFocusWorksheet: function(focus) {
-      return focus.mode === undefined || focus.mode == 'worksheet' || focus.mode == 'wsearch';
+      return focus.mode === undefined || focus.mode == 'subworksheets_block';
     },
     isFocusMarkup: function(focus) {
       // If search and didn't return bundles, then count as markup
-      return focus.mode == 'markup_block' || (focus.mode == 'search' && (!focus.interpreted.items[0] || focus.interpreted.items[0].bundles_spec.bundle_infos[0] === undefined));
+      return focus.mode == 'markup_block';
     },
     isFocusBundle: function(focus) {
       return !this.isFocusWorksheet(focus) && !this.isFocusMarkup(focus);
@@ -69,13 +69,11 @@ let WorksheetSidePanel = React.createClass({
           return focus.bundles_spec.bundle_infos[0];
     },
     getWorksheetInfo: function(focus) {
-      if (focus.mode == 'worksheet')
-        return focus.subworksheet_info;
-      else if (focus.mode == 'wsearch') {
+      if (focus.mode == 'subworksheets_block') {
         if (this.props.subFocusIndex == -1)
           return null;
-        var item = focus.interpreted.items[this.props.subFocusIndex];
-        return item ? item.subworksheet_info : null;
+        var item = focus.subworkseet_infos[this.props.subFocusIndex];
+        return item;
       }
       else
         return focus;
@@ -241,15 +239,16 @@ var WorksheetDetailSidePanel = React.createClass({
                 <td><a href={url} target="_blank">{b.metadata.name}({short_uuid})</a></td>
               </tr>);
             });
-          } else if (item.mode == 'worksheet') {
+          } else if (item.mode == 'subworksheets_block') {
             // Show worksheet
-            var info = item.subworksheet_info;
-            var title = info.title || info.name;
-            var url = '/worksheets/' + info.uuid;
-            rows.push(<tr>
-              <td>worksheet</td>
-              <td><a href={url} target="_blank">{title}</a></td>
-            </tr>);
+            item.subworksheet_infos.forEach(function(info) {
+              var title = info.title || info.name;
+              var url = '/worksheets/' + info.uuid;
+              rows.push(<tr>
+                <td>worksheet</td>
+                <td><a href={url} target="_blank">{title}</a></td>
+              </tr>);
+            })
           }
         });
       }

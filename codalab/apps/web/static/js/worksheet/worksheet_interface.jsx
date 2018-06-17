@@ -38,8 +38,8 @@ var Worksheet = React.createClass({
       if (item) {
         if (item.mode == 'table_block')
           return item.bundles_spec.bundle_infos.length;
-        if (item.mode == 'wsearch_block')
-          return item.interpreted.items.length;
+        if (item.mode == 'subworksheets_block')
+          return item.subworksheet_infos.length;
       } else {
         return null;
       }
@@ -239,8 +239,7 @@ var Worksheet = React.createClass({
 
             if (focusIndex >= 0 && (
                     wsItems[focusIndex].mode === 'table_block' ||
-                    wsItems[focusIndex].mode === 'search' ||
-                    wsItems[focusIndex].mode === 'wsearch')) {
+                    wsItems[focusIndex].mode === 'subworksheets_block')) {
                 // worksheet_item_interface and table_item_interface do the exact same thing anyway right now
                 if (subFocusIndex - 1 < 0) {
                     this.setFocus(focusIndex - 1, 'end'); // Move out of this table to the item above the current table
@@ -258,8 +257,7 @@ var Worksheet = React.createClass({
             var wsItems = this.state.ws.info.items;
             if (focusIndex >= 0 && (
                   wsItems[focusIndex].mode === 'table_block' ||
-                  wsItems[focusIndex].mode === 'search' ||
-                  wsItems[focusIndex].mode === 'wsearch' )) {
+                  wsItems[focusIndex].mode === 'subworksheets_block' )) {
                 if (subFocusIndex + 1 >= this._numTableRows(wsItems[focusIndex])) {
                     this.setFocus(focusIndex + 1, 0);
                 } else {
@@ -412,7 +410,7 @@ var Worksheet = React.createClass({
               } else {
                 var item = this.state.ws.info.items[this.state.focusIndex];
                 // For non-tables such as search and wsearch, we have subFocusIndex, but not backed by raw items, so use 0.
-                var focusIndexPair = this.state.focusIndex + ',' + (item.mode == 'table_block' ? this.state.subFocusIndex : 0);
+                var focusIndexPair = this.state.focusIndex + ',' + ((item.mode == 'table_block' || item.mode == 'subworksheets_block') ? this.state.subFocusIndex : 0);
                 rawIndex = this.state.ws.info.interpreted_to_raw[focusIndexPair];
               }
 

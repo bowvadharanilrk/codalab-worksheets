@@ -227,7 +227,7 @@ var WorksheetDetailSidePanel = React.createClass({
       var rows = [];
       if (worksheet.items) {
         worksheet.items.forEach(function(item) {
-          if (item.bundles_spec.bundle_infos[0]) {
+          if (item.bundles_spec) {
             // Show bundle
             var bundle_infos = item.bundles_spec.bundle_infos;
 

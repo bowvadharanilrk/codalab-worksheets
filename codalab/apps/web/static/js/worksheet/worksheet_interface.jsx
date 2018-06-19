@@ -411,7 +411,7 @@ var Worksheet = React.createClass({
                 var item = this.state.ws.info.items[this.state.focusIndex];
                 // For non-tables such as search and wsearch, we have subFocusIndex, but not backed by raw items, so use 0.
                 var focusIndexPair = this.state.focusIndex + ',' + ((item.mode == 'table_block' || item.mode == 'subworksheets_block') ? this.state.subFocusIndex : 0);
-                rawIndex = this.state.ws.info.interpreted_to_raw[focusIndexPair];
+                rawIndex = this.state.ws.info.block_to_raw[focusIndexPair];
               }
 
               if (rawIndex === undefined) {

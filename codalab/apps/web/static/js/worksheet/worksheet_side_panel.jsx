@@ -69,10 +69,10 @@ let WorksheetSidePanel = React.createClass({
           return focus.bundles_spec.bundle_infos[0];
     },
     getWorksheetInfo: function(focus) {
-      if (focus.mode == 'subworksheets_block') {
-        if (this.props.subFocusIndex == -1)
+      if (focus.mode === 'subworksheets_block') {
+        if (this.props.subFocusIndex === -1)
           return null;
-        var item = focus.subworkseet_infos[this.props.subFocusIndex];
+        var item = focus.subworksheet_infos[this.props.subFocusIndex];
         return item;
       }
       else

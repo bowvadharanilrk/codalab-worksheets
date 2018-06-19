@@ -248,7 +248,7 @@ var BundleBrowser = React.createClass({
             );
             rows.push(
               <tr><td>{fileBrowser}</td></tr>
-              );
+            );
           } else {
             rows.push(
               <tr>
@@ -261,7 +261,7 @@ var BundleBrowser = React.createClass({
                   <a href={url} target="_blank">{b.metadata.name}({short_uuid})</a>
                 </td>
               </tr>
-              );
+            );
           }
         }.bind(this));
       }

@@ -150,7 +150,6 @@ var addWorksheetItems = function(props, worksheet_items) {
       'table_block': TableItem,
       'contents_block': ContentsItem,
       'subworksheets_block': WorksheetItem,
-      'html_block': HTMLItem,
       'record_block': RecordItem,
       'image_block': ImageItem,
       'graph_block': GraphItem,

@@ -54,7 +54,7 @@ var GraphItem = React.createClass({
         columns.push(ycol);
         totalNumPoints += points.length;
       }
-      // console.log('GraphItem._getData: %s points', totalNumPoints);
+
       return {
         xs: ytox,
         columns: columns,
@@ -66,8 +66,6 @@ var GraphItem = React.createClass({
     },
 
     componentDidMount: function() {
-      //console.log('GraphItem: componentDidMount');
-
       // Axis labels
       var item = this.props.item;
       var xlabel = item.xlabel || this._xi();
@@ -85,32 +83,31 @@ var GraphItem = React.createClass({
     },
 
     shouldComponentUpdate: function(nextProps, nextState) {
-      return worksheetItemPropsChanged(this.props, nextProps);
+      var propsChanged = worksheetItemPropsChanged(this.props, nextProps);
+      var chartChanged = this.state.chart !== nextState.chart;
+      return propsChanged || chartChanged;
     },
 
     render: function() {
-        //console.log('GraphItem.render', this.state.chart);
-
-        // Rendering the chart is slow, so throttle it.
-        var self = this;
-        function renderChart() {
-          if (self.state.chart) {
-            // TODO: unload only trajectories which are outdated.
-            self.state.chart.load(self._getData());
-          }
+      var self = this;
+      function renderChart() {
+        if (self.state.chart) {
+          // TODO: unload only trajectories which are outdated.
+          self.state.chart.load(self._getData());
         }
-        if (this.throttledRenderChart === undefined)
-            this.throttledRenderChart = _.throttle(renderChart, 2000).bind(this);
-        this.throttledRenderChart();
+      }
+      if (this.throttledRenderChart === undefined)
+          this.throttledRenderChart = _.throttle(renderChart, 2000).bind(this);
+      this.throttledRenderChart();
 
-        var className = 'type-image' + (this.props.focused ? ' focused' : '');
-        var bundleInfo = this.props.item.bundles_spec.bundle_infos[0];
-        return (
-            <div className="ws-item" onClick={this.handleClick} onContextMenu={this.props.handleContextMenu.bind(null, bundleInfo.uuid, this.props.focusIndex, 0, bundleInfo.bundle_type === 'run')}>
-                <div className={className}>
-                    <div id={this._chartId()} />
-                </div>
+      var className = 'type-image' + (this.props.focused ? ' focused' : '');
+      var bundleInfo = this.props.item.bundles_spec.bundle_infos[0];
+      return (
+        <div className="ws-item" onClick={this.handleClick} onContextMenu={this.props.handleContextMenu.bind(null, bundleInfo.uuid, this.props.focusIndex, 0, bundleInfo.bundle_type === 'run')}>
+            <div className={className}>
+                <div id={this._chartId()} />
             </div>
-        );
+        </div>
+      );
     }
 });

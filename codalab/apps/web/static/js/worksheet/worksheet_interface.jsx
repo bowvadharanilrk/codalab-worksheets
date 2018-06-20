@@ -490,7 +490,7 @@ var Worksheet = React.createClass({
                   var items = this.state.ws.info.items;
                   var numOfBundles = this.getNumOfBundles();
                   if (rawIndexAfterEditMode !== undefined) {
-                    var focusIndexPair = this.state.ws.info.raw_to_interpreted[rawIndexAfterEditMode];
+                    var focusIndexPair = this.state.ws.info.raw_to_block[rawIndexAfterEditMode];
                     if (focusIndexPair === undefined) {
                       console.error('Can\'t map raw index ' + rawIndexAfterEditMode + ' to item index pair');
                       focusIndexPair = [0, 0];  // Fall back to default

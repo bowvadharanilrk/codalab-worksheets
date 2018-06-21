@@ -522,7 +522,6 @@ var Worksheet = React.createClass({
               }.bind(this)
           });
         } else {
-          console.log(partialUpdateItems);
           var ws = _.clone(this.state.ws);
           for (var i = 0; i < partialUpdateItems.length; i++) {
             if (!partialUpdateItems[i]) continue;
